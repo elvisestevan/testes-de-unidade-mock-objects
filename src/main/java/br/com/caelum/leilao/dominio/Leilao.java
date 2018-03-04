@@ -1,47 +1,75 @@
 package br.com.caelum.leilao.dominio;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 public class Leilao {
 
-    private String descricao;
-    private List<Lance> lances;
+	private String descricao;
+	private Calendar data;
+	private List<Lance> lances;
+	private boolean encerrado;
+	private int id;
+	
+	public Leilao(String descricao) {
+		this(descricao, Calendar.getInstance());
+	}
+	
+	public Leilao(String descricao, Calendar data) {
+		this.descricao = descricao;
+		this.data = data;
+		this.lances = new ArrayList<Lance>();
+	}
+	
+	public void propoe(Lance lance) {
+		if(lances.isEmpty() || podeDarLance(lance.getUsuario())) {
+			lances.add(lance);
+		}
+	}
 
-    public Leilao(String descricao) {
-        this.descricao = descricao;
-        this.lances = new ArrayList<Lance>();
-    }
+	private boolean podeDarLance(Usuario usuario) {
+		return !ultimoLanceDado().getUsuario().equals(usuario) && qtdDeLancesDo(usuario) <5;
+	}
 
-    public void propoe(Lance lance) {
+	private int qtdDeLancesDo(Usuario usuario) {
+		int total = 0;
+		for(Lance l : lances) {
+			if(l.getUsuario().equals(usuario)) total++;
+		}
+		return total;
+	}
 
-        if (this.lances.isEmpty() || podeDarLance(lance.getUsuario())) {
-            lances.add(lance);
-        }
-    }
+	private Lance ultimoLanceDado() {
+		return lances.get(lances.size()-1);
+	}
 
-    private boolean podeDarLance(Usuario usuario) {
-        long total = this.lances
-                .stream()
-                .filter((l) -> l.getUsuario().equals(usuario))
-                .count();
+	public String getDescricao() {
+		return descricao;
+	}
 
-        return !getUltimoLanceDado().getUsuario().equals(usuario) && total < 5L;
-    }
+	public List<Lance> getLances() {
+		return Collections.unmodifiableList(lances);
+	}
 
-    public Lance getUltimoLanceDado() {
-        return lances.get(lances.size() - 1);
-    }
+	public Calendar getData() {
+		return (Calendar) data.clone();
+	}
 
-    public String getDescricao() {
-        return descricao;
-    }
+	public void encerra() {
+		this.encerrado = true;
+	}
+	
+	public boolean isEncerrado() {
+		return encerrado;
+	}
 
-    public List<Lance> getLances() {
-        return Collections.unmodifiableList(lances);
-    }
-
-
-
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
+	}
 }
