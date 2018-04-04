@@ -1,6 +1,7 @@
 package br.com.caelum.leilao.servico;
 
 import br.com.caelum.leilao.dominio.Leilao;
+import br.com.caelum.leilao.infra.dao.EnviadorDeEmail;
 import br.com.caelum.leilao.infra.dao.RepositorioDeLeiloes;
 
 import java.util.Calendar;
@@ -9,9 +10,11 @@ import java.util.List;
 public class EncerradorDeLeilao {
 
     private RepositorioDeLeiloes dao;
+    private EnviadorDeEmail carteiro;
 
-    public EncerradorDeLeilao(RepositorioDeLeiloes dao) {
+    public EncerradorDeLeilao(RepositorioDeLeiloes dao, EnviadorDeEmail carteiro) {
         this.dao = dao;
+        this.carteiro = carteiro;
     }
 
     private int total = 0;
@@ -24,6 +27,7 @@ public class EncerradorDeLeilao {
                 leilao.encerra();
                 total++;
                 dao.atualiza(leilao);
+                carteiro.envia(leilao);
             }
         }
     }
