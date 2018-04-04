@@ -1,16 +1,16 @@
 package br.com.caelum.leilao.servico;
 
 import br.com.caelum.leilao.dominio.Leilao;
-import br.com.caelum.leilao.infra.dao.LeilaoDao;
+import br.com.caelum.leilao.infra.dao.RepositorioDeLeiloes;
 
 import java.util.Calendar;
 import java.util.List;
 
 public class EncerradorDeLeilao {
 
-    private LeilaoDao dao;
+    private RepositorioDeLeiloes dao;
 
-    public EncerradorDeLeilao(LeilaoDao dao) {
+    public EncerradorDeLeilao(RepositorioDeLeiloes dao) {
         this.dao = dao;
     }
 

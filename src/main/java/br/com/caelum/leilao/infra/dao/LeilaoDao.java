@@ -15,7 +15,7 @@ import br.com.caelum.leilao.dominio.Lance;
 import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.dominio.Usuario;
 
-public class LeilaoDao {
+public class LeilaoDao implements RepositorioDeLeiloes{
 
     private Connection conexao;
 
@@ -34,6 +34,7 @@ public class LeilaoDao {
         return c;
     }
 
+    @Override
     public void salva(Leilao leilao) {
         try {
             String sql = "INSERT INTO LEILAO (DESCRICAO, DATA, ENCERRADO) VALUES (?,?,?);";
@@ -69,10 +70,12 @@ public class LeilaoDao {
 
     }
 
+    @Override
     public List<Leilao> encerrados() {
         return porEncerrado(true);
     }
 
+    @Override
     public List<Leilao> correntes() {
         return porEncerrado(false);
     }
@@ -115,6 +118,7 @@ public class LeilaoDao {
         }
     }
 
+    @Override
     public void atualiza(Leilao leilao) {
 
         try {
@@ -132,4 +136,5 @@ public class LeilaoDao {
     }
 
     public int x() { return 10; }
+
 }

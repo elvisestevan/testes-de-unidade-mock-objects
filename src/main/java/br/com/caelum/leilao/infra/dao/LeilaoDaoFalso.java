@@ -5,14 +5,16 @@ import java.util.List;
 
 import br.com.caelum.leilao.dominio.Leilao;
 
-public class LeilaoDaoFalso {
+public class LeilaoDaoFalso implements RepositorioDeLeiloes {
 
     private static List<Leilao> leiloes = new ArrayList<Leilao>();;
 
+    @Override
     public void salva(Leilao leilao) {
         leiloes.add(leilao);
     }
 
+    @Override
     public List<Leilao> encerrados() {
 
         List<Leilao> filtrados = new ArrayList<Leilao>();
@@ -23,6 +25,7 @@ public class LeilaoDaoFalso {
         return filtrados;
     }
 
+    @Override
     public List<Leilao> correntes() {
 
         List<Leilao> filtrados = new ArrayList<Leilao>();
@@ -33,5 +36,6 @@ public class LeilaoDaoFalso {
         return filtrados;
     }
 
+    @Override
     public void atualiza(Leilao leilao) { /* faz nada! */ }
 }
