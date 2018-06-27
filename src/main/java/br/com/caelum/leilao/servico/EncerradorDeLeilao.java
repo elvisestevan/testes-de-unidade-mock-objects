@@ -1,8 +1,8 @@
 package br.com.caelum.leilao.servico;
 
 import br.com.caelum.leilao.dominio.Leilao;
-import br.com.caelum.leilao.infra.dao.EnviadorDeEmail;
 import br.com.caelum.leilao.infra.dao.RepositorioDeLeiloes;
+import br.com.caelum.leilao.infra.email.Carteiro;
 
 import java.util.Calendar;
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 public class EncerradorDeLeilao {
 
     private RepositorioDeLeiloes dao;
-    private EnviadorDeEmail carteiro;
+    private Carteiro carteiro;
 
-    public EncerradorDeLeilao(RepositorioDeLeiloes dao, EnviadorDeEmail carteiro) {
+    public EncerradorDeLeilao(RepositorioDeLeiloes dao, Carteiro carteiro) {
         this.dao = dao;
         this.carteiro = carteiro;
     }
@@ -23,12 +23,17 @@ public class EncerradorDeLeilao {
         List<Leilao> todosLeiloesCorrentes = dao.correntes();
 
         for (Leilao leilao : todosLeiloesCorrentes) {
-            if (comecouSemanaPassada(leilao)) {
-                leilao.encerra();
-                total++;
-                dao.atualiza(leilao);
-                carteiro.envia(leilao);
+            try {
+                if (comecouSemanaPassada(leilao)) {
+                    leilao.encerra();
+                    total++;
+                    dao.atualiza(leilao);
+                    carteiro.envia(leilao);
+                }
+            } catch(Exception e) {
+                //loga exception e continua...
             }
+
         }
     }
 
